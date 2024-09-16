@@ -4,11 +4,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_serializer import SerializerMixin
 
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
-
-db = SQLAlchemy(metadata=metadata)
+db = SQLAlchemy()
 
 class Hero(db.Model, SerializerMixin):
     __tablename__ = 'heroes'
@@ -21,7 +17,7 @@ class Hero(db.Model, SerializerMixin):
     hero_powers = db.relationship('HeroPower', backref='hero', cascade='all, delete-orphan')
 
     # Serialize only relevant fields
-    serialize_rules = ('-hero_powers', 'hero_powers.power')
+    serialize_rules = ()
 
     # Association proxy to access powers through hero_powers
     powers = association_proxy('hero_powers', 'power')
